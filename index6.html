@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EstateConnect | Modern Real Estate Advertising Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                        light: '#F9FAFB',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .property-card:hover .property-image {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+        .video-thumbnail::after {
+            content: '\f144';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        .chat-bubble {
+            border-radius: 1rem;
+            max-width: 70%;
+        }
+        .smooth-transition {
+            transition: all 0.3s ease;
+        }
+        .nav-link.active {
+            border-bottom: 3px solid #4F46E5;
+            font-weight: 600;
+        }
+        .rtl {
+            direction: rtl;
+        }
+        .hidden-language {
+            display: none;
+        }
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .language-option i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Language Switcher -->
+    <div class="fixed top-4 right-4 z-50">
+        <div class="relative">
+            <button id="languageButton" class="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center">
+                <span class="text-lg font-medium" id="currentLanguage">EN</span>
+            </button>
+            <div id="languageDropdown" class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                <button class="block w-full px-4 py-2 text-left hover:bg-gray-100 language-option" data-lang="en">
+                    <i class="fas fa-language"></i> English (EN)
+                </button>
+                <button class="block w-full px-4 py-2 text-left hover:bg-gray-100 language-option" data-lang="ar">
+                    <i class="fas fa-language"></i> العربية (AR)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-home text-primary text-2xl"></i>
+                <span class="text-xl font-bold text-dark en">EstateConnect</span>
+                <span class="text-xl font-bold text-dark ar hidden">إيستيت كونكت</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="nav-link active text-primary en">Home</a>
+                <a href="#" class="nav-link active text-primary ar hidden">الرئيسية</a>
+                
+                <a href="#" class="nav-link text-gray-600 hover:text-primary en">Properties</a>
+                <a href="#" class="nav-link text-gray-600 hover:text-primary ar hidden">العقارات</a>
+                
+                <a href="#" class="nav-link text-gray-600 hover:text-primary en">Pricing</a>
+                <a href="#" class="nav-link text-gray-600 hover:text-primary ar hidden">الأسعار</a>
+                
+                <a href="#" class="nav-link text-gray-600 hover:text-primary en">About</a>
+                <a href="#" class="nav-link text-gray-600 hover:text-primary ar hidden">من نحن</a>
+                
+                <a href="#" class="nav-link text-gray-600 hover:text-primary en">Contact</a>
+                <a href="#" class="nav-link text-gray-600 hover:text-primary ar hidden">اتصل بنا</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="md:hidden text-gray-600" id="mobileMenuButton">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <div class="hidden md:flex space-x-2">
+                    <button class="px-4 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white smooth-transition en">
+                        Login
+                    </button>
+                    <button class="px-4 py-2 text-primary border border-primary rounded-lg hover:bg-primary hover:text-white smooth-transition ar hidden">
+                        تسجيل دخول
+                    </button>
+                    
+                    <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 smooth-transition en">
+                        Register
+                    </button>
+                    <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 smooth-transition ar hidden">
+                        تسجيل
+                    </button>
+                </div>
+                <div class="relative dropdown">
+                    <button class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden dropdown-menu">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 en">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 ar hidden">الملف الشخصي</a>
+                        
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 en">Messages</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 ar hidden">الرسائل</a>
+                        
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 en">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 ar hidden">الإعدادات</a>
+                        
+                        <div class="border-t border-gray-200"></div>
+                        
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 en">Logout</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 ar hidden">تسجيل خروج</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary to-indigo-700 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4 en">Find Your Perfect Property</h1>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4 ar hidden">ابحث عن عقارك المثالي</h1>
+                    
+                    <p class="text-xl mb-8 en">The modern way to buy, rent or advertise properties in Egypt</p>
+                    <p class="text-xl mb-8 ar hidden">الطريقة الحديثة لشراء أو تأجير أو الإعلان عن العقارات في مصر</p>
+                    
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 rtl:sm:space-x-0 rtl:sm:space-x-reverse">
+                        <button class="px-6 py-3 bg-white text-primary rounded-lg font-medium hover:bg-gray-100 smooth-transition en">
+                            Browse Properties
+                        </button>
+                        <button class="px-6 py-3 bg-white text-primary rounded-lg font-medium hover:bg-gray-100 smooth-transition ar hidden">
+                            تصفح العقارات
+                        </button>
+                        
+                        <button class="px-6 py-3 border border-white text-white rounded-lg font-medium hover:bg-white/10 smooth-transition en">
+                            List Your Property
+                        </button>
+                        <button class="px-6 py-3 border border-white text-white rounded-lg font-medium hover:bg-white/10 smooth-transition ar hidden">
+                            أعلن عن عقارك
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                            <div class="p-4">
+                                <h3 class="text-lg font-semibold text-white mb-2 en">Search Properties</h3>
+                                <h3 class="text-lg font-semibold text-white mb-2 ar hidden">بحث العقارات</h3>
+                                
+                                <div class="space-y-3">
+                                    <div>
+                                        <select class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800">
+                                            <option value="" class="en">Select City</option>
+                                            <option value="" class="ar hidden">اختر المدينة</option>
+                                            <option value="cairo" class="en">Cairo</option>
+                                            <option value="cairo" class="ar hidden">القاهرة</option>
+                                            <option value="alexandria" class="en">Alexandria</option>
+                                            <option value="alexandria" class="ar hidden">الإسكندرية</option>
+                                            <option value="giza" class="en">Giza</option>
+                                            <option value="giza" class="ar hidden">الجيزة</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <select class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800">
+                                            <option value="" class="en">Select Neighborhood</option>
+                                            <option value="" class="ar hidden">اختر المنطقة</option>
+                                            <option value="zamalek" class="en">Zamalek</option>
+                                            <option value="zamalek" class="ar hidden">الزمالك</option>
+                                            <option value="maadi" class="en">Maadi</option>
+                                            <option value="maadi" class="ar hidden">المعادي</option>
+                                            <option value="heliopolis" class="en">Heliopolis</option>
+                                            <option value="heliopolis" class="ar hidden">مصر الجديدة</option>
+                                        </select>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <select class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800">
+                                            <option value="" class="en">Property Type</option>
+                                            <option value="" class="ar hidden">نوع العقار</option>
+                                            <option value="apartment" class="en">Apartment</option>
+                                            <option value="apartment" class="ar hidden">شقة</option>
+                                            <option value="villa" class="en">Villa</option>
+                                            <option value="villa" class="ar hidden">فيلا</option>
+                                            <option value="land" class="en">Land</option>
+                                            <option value="land" class="ar hidden">أرض</option>
+                                        </select>
+                                        <select class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800">
+                                            <option value="" class="en">Price Range</option>
+                                            <option value="" class="ar hidden">نطاق السعر</option>
+                                            <option value="0-500000" class="en">Up to 500,000 EGP</option>
+                                            <option value="0-500000" class="ar hidden">حتى 500,000 جنيه</option>
+                                            <option value="500000-1000000" class="en">500K - 1M EGP</option>
+                                            <option value="500000-1000000" class="ar hidden">500 ألف - 1 مليون جنيه</option>
+                                            <option value="1000000+" class="en">1M+ EGP</option>
+                                            <option value="1000000+" class="ar hidden">أكثر من 1 مليون جنيه</option>
+                                        </select>
+                                    </div>
+                                    <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 smooth-transition en">
+                                        Search Properties
+                                    </button>
+                                    <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 smooth-transition ar hidden">
+                                        بحث العقارات
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-dark mb-4 en">Why Choose EstateConnect?</h2>
+                <h2 class="text-3xl font-bold text-dark mb-4 ar hidden">لماذا تختار إيستيت كونكت؟</h2>
+                
+                <p class="text-gray-600 max-w-2xl mx-auto en">The most advanced real estate advertising platform in Egypt with powerful features for both advertisers and property seekers.</p>
+                <p class="text-gray-600 max-w-2xl mx-auto ar hidden">أكثر منصة متقدمة للإعلان عن العقارات في مصر مع ميزات قوية لكل من المعلنين والباحثين عن العقارات.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-xl p-6 shadow-sm hover:shadow-md smooth-transition">
+                    <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 en">Secure Verification</h3>
+                    <h3 class="text-xl font-semibold mb-2 ar hidden">تحقق آمن</h3>
+                    
+                    <p class="text-gray-600 en">Google account + OTP phone verification for all users to ensure authenticity and security.</p>
+                    <p class="text-gray-600 ar hidden">حساب جوجل + التحقق عبر الهاتف برمز OTP لجميع المستخدمين لضمان الأصالة والأمان.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-6 shadow-sm hover:shadow-md smooth-transition">
+                    <div class="w-14 h-14 bg-secondary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-secondary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 en">Advanced Analytics</h3>
+                    <h3 class="text-xl font-semibold mb-2 ar hidden">تحليلات متقدمة</h3>
+                    
+                    <p class="text-gray-600 en">Detailed statistics for advertisers to track their property performance and engagement.</p>
+                    <p class="text-gray-600 ar hidden">إحصائيات مفصلة للمعلنين لمتابعة أداء عقاراتهم ومعدلات التفاعل.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-6 shadow-sm hover:shadow-md smooth-transition">
+                    <div class="w-14 h-14 bg-purple-500/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-comments text-purple-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 en">Direct Communication</h3>
+                    <h3 class="text-xl font-semibold mb-2 ar hidden">تواصل مباشر</h3>
+                    
+                    <p class="text-gray-600 en">Built-in messaging system for seamless communication between buyers and advertisers.</p>
+                    <p class="text-gray-600 ar hidden">نظام مراسلة مدمج للتواصل السلس بين المشترين والمعلنين.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Property Listings -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-dark en">Featured Properties</h2>
+                <h2 class="text-3xl font-bold text-dark ar hidden">عقارات مميزة</h2>
+                
+                <a href="#" class="text-primary font-medium flex items-center en">
+                    View All <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+                <a href="#" class="text-primary font-medium flex items-center ar hidden">
+                    عرض الكل <i class="fas fa-arrow-left ml-2"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Property Card 1 -->
+                <div class="property-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md smooth-transition">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Modern Apartment" class="w-full h-full object-cover property-image">
+                        <div class="absolute top-3 left-3 bg-primary text-white px-2 py-1 rounded text-sm font-medium en">
+                            Featured
+                        </div>
+                        <div class="absolute top-3 left-3 bg-primary text-white px-2 py-1 rounded text-sm font-medium ar hidden">
+                            مميز
+                        </div>
+                        <div class="absolute top-3 right-3 bg-white/90 text-dark p-1 rounded-full">
+                            <i class="far fa-heart text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold en">Modern Apartment in Zamalek</h3>
+                            <h3 class="text-xl font-semibold ar hidden">شقة عصرية في الزمالك</h3>
+                            <div class="text-primary font-bold">2,500,000 EGP</div>
+                        </div>
+                        <p class="text-gray-600 mb-3"><i class="fas fa-map-marker-alt text-gray-400 mr-2"></i> <span class="en">Zamalek, Cairo</span><span class="ar hidden">الزمالك، القاهرة</span></p>
+                        <div class="flex justify-between text-gray-500 mb-4">
+                            <span><i class="fas fa-bed mr-1"></i> <span class="en">3 Beds</span><span class="ar hidden">3 غرف</span></span>
+                            <span><i class="fas fa-bath mr-1"></i> <span class="en">2 Baths</span><span class="ar hidden">2 حمام</span></span>
+                            <span><i class="fas fa-ruler-combined mr-1"></i> <span class="en">150 m²</span><span class="ar hidden">150 م²</span></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="far fa-eye mr-1"></i> <span class="en">1,245 views</span><span class="ar hidden">1,245 مشاهدة</span>
+                            </div>
+                            <button class="text-primary font-medium flex items-center en">
+                                View Details <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </button>
+                            <button class="text-primary font-medium flex items-center ar hidden">
+                                التفاصيل <i class="fas fa-arrow-left ml-2 text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 2 -->
+                <div class="property-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md smooth-transition">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Luxury Villa" class="w-full h-full object-cover property-image">
+                        <div class="absolute top-3 right-3 bg-white/90 text-dark p-1 rounded-full">
+                            <i class="far fa-heart text-xl"></i>
+                        </div>
+                        <div class="absolute bottom-3 left-3 flex space-x-1">
+                            <div class="bg-white/90 text-dark p-1 rounded-full">
+                                <i class="fas fa-play text-sm"></i>
+                            </div>
+                            <span class="bg-white/90 text-dark px-2 py-1 rounded text-xs font-medium en">3 Videos</span>
+                            <span class="bg-white/90 text-dark px-2 py-1 rounded text-xs font-medium ar hidden">3 فيديوهات</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold en">Luxury Villa in New Cairo</h3>
+                            <h3 class="text-xl font-semibold ar hidden">فيلا فاخرة في القاهرة الجديدة</h3>
+                            <div class="text-primary font-bold">5,800,000 EGP</div>
+                        </div>
+                        <p class="text-gray-600 mb-3"><i class="fas fa-map-marker-alt text-gray-400 mr-2"></i> <span class="en">New Cairo</span><span class="ar hidden">القاهرة الجديدة</span></p>
+                        <div class="flex justify-between text-gray-500 mb-4">
+                            <span><i class="fas fa-bed mr-1"></i> <span class="en">5 Beds</span><span class="ar hidden">5 غرف</span></span>
+                            <span><i class="fas fa-bath mr-1"></i> <span class="en">4 Baths</span><span class="ar hidden">4 حمام</span></span>
+                            <span><i class="fas fa-ruler-combined mr-1"></i> <span class="en">350 m²</span><span class="ar hidden">350 م²</span></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="far fa-eye mr-1"></i> <span class="en">892 views</span><span class="ar hidden">892 مشاهدة</span>
+                            </div>
+                            <button class="text-primary font-medium flex items-center en">
+                                View Details <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </button>
+                            <button class="text-primary font-medium flex items-center ar hidden">
+                                التفاصيل <i class="fas fa-arrow-left ml-2 text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Card 3 -->
+                <div class="property-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md smooth-transition">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Commercial Space" class="w-full h-full object-cover property-image">
+                        <div class="absolute top-3 right-3 bg-white/90 text-dark p-1 rounded-full">
+                            <i class="far fa-heart text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold en">Commercial Space in Heliopolis</h3>
+                            <h3 class="text-xl font-semibold ar hidden">مساحة تجارية في مصر الجديدة</h3>
+                            <div class="text-primary font-bold">3,200,000 EGP</div>
+                        </div>
+                        <p class="text-gray-600 mb-3"><i class="fas fa-map-marker-alt text-gray-400 mr-2"></i> <span class="en">Heliopolis, Cairo</span><span class="ar hidden">مصر الجديدة، القاهرة</span></p>
+                        <div class="flex justify-between text-gray-500 mb-4">
+                            <span><i class="fas fa-door-open mr-1"></i> <span class="en">2 Rooms</span><span class="ar hidden">2 غرف</span></span>
+                            <span><i class="fas fa-bath mr-1"></i> <span class="en">1 Bath</span><span class="ar hidden">1 حمام</span></span>
+                            <span><i class="fas fa-ruler-combined mr-1"></i> <span class="en">120 m²</span><span class="ar hidden">120 م²</span></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="far fa-eye mr-1"></i> <span class="en">567 views</span><span class="ar hidden">567 مشاهدة</span>
+                            </div>
+                            <button class="text-primary font-medium flex items-center en">
+                                View Details <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                            </button>
+                            <button class="text-primary font-medium flex items-center ar hidden">
+                                التفاصيل <i class="fas fa-arrow-left ml-2 text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-dark mb-4 en">How It Works</h2>
+                <h2 class="text-3xl font-bold text-dark mb-4 ar hidden">كيف تعمل المنصة</h2>
+                
+                <p class="text-gray-600 max-w-2xl mx-auto en">Simple steps to get started with EstateConnect whether you're looking to buy, rent, or advertise properties.</p>
+                <p class="text-gray-600 max-w-2xl mx-auto ar hidden">خطوات بسيطة للبدء مع إيستيت كونكت سواء كنت تبحث عن شراء أو تأجير أو الإعلان عن العقارات.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-primary text-2xl font-bold">1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 en">Create Your Account</h3>
+                    <h3 class="text-xl font-semibold mb-2 ar hidden">إنشاء حسابك</h3>
+                    
+                    <p class="text-gray-600 en">Register securely with Google and verify your phone number via OTP.</p>
+                    <p class="text-gray-600 ar hidden">سجل بحساب جوجل بشكل آمن وتحقق عبر الهاتف برمز OTP.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-secondary text-2xl font-bold">2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 en">Find or List Properties</h3>
+                    <h3 class="text-xl font-semibold mb-2 ar hidden">ابحث أو أعلن عن عقار</h3>
+                    
+                    <p class="text-gray-600 en">Browse properties with advanced filters or list your own with detailed information.</p>
+                    <p class="text-gray-600 ar hidden">تصفح العقارات مع فلاتر متقدمة أو أعلن عن عقارك مع معلومات مفصلة.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-purple-500 text-2xl font-bold">3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 en">Connect & Communicate</h3>
+                    <h3 class="text-xl font-semibold mb-2 ar hidden">تواصل وتفاعل</h3>
+                    
+                    <p class="text-gray-600 en">Message directly with buyers/sellers and complete your transaction.</p>
+                    <p class="text-gray-600 ar hidden">راسل المشترين/البائعين مباشرة وأكمل صفقتك.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Plans -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-dark mb-4 en">Pricing Plans for Advertisers</h2>
+                <h2 class="text-3xl font-bold text-dark mb-4 ar hidden">خطط الأسعار للمعلنين</h2>
+                
+                <p class="text-gray-600 max-w-2xl mx-auto en">Choose the subscription plan that works best for your real estate advertising needs.</p>
+                <p class="text-gray-600 max-w-2xl mx-auto ar hidden">اختر خطة الاشتراك التي تناسب احتياجاتك في الإعلان عن العقارات.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Basic Plan -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <div class="bg-gray-100 p-6 text-center">
+                        <h3 class="text-xl font-semibold mb-1 en">Basic</h3>
+                        <h3 class="text-xl font-semibold mb-1 ar hidden">الأساسي</h3>
+                        
+                        <p class="text-gray-600 mb-4 en">For individual property owners</p>
+                        <p class="text-gray-600 mb-4 ar hidden">لملاك العقارات الأفراد</p>
+                        
+                        <div class="text-3xl font-bold text-dark mb-2">500 EGP<span class="text-sm font-normal text-gray-500 en">/month</span><span class="text-sm font-normal text-gray-500 ar hidden">/شهر</span></div>
+                        <button class="w-full bg-gray-200 text-dark py-2 rounded-lg hover:bg-gray-300 smooth-transition en">
+                            Get Started
+                        </button>
+                        <button class="w-full bg-gray-200 text-dark py-2 rounded-lg hover:bg-gray-300 smooth-transition ar hidden">
+                            ابدأ الآن
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">1 Property Listing</span><span class="ar hidden">إعلان عن عقار واحد</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">10 Photos per Property</span><span class="ar hidden">10 صور لكل عقار</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">1 Video (5 min max)</span><span class="ar hidden">فيديو واحد (5 دقائق كحد أقصى)</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">Basic Analytics</span><span class="ar hidden">تحليلات أساسية</span></li>
+                            <li class="flex items-center text-gray-400"><i class="fas fa-times text-red-400 mr-2"></i> <span class="en">No Featured Listings</span><span class="ar hidden">لا يوجد إعلانات مميزة</span></li>
+                            <li class="flex items-center text-gray-400"><i class="fas fa-times text-red-400 mr-2"></i> <span class="en">No Priority Support</span><span class="ar hidden">لا يوجد دعم مميز</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Popular Plan -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform scale-105">
+                    <div class="bg-primary text-white p-6 text-center relative">
+                        <div class="absolute top-0 right-4 bg-secondary text-white text-xs font-bold px-2 py-1 rounded-b en">
+                            POPULAR
+                        </div>
+                        <div class="absolute top-0 right-4 bg-secondary text-white text-xs font-bold px-2 py-1 rounded-b ar hidden">
+                            الأكثر شيوعاً
+                        </div>
+                        <h3 class="text-xl font-semibold mb-1 en">Professional</h3>
+                        <h3 class="text-xl font-semibold mb-1 ar hidden">المحترف</h3>
+                        
+                        <p class="text-white/80 mb-4 en">For real estate professionals</p>
+                        <p class="text-white/80 mb-4 ar hidden">لمحترفي العقارات</p>
+                        
+                        <div class="text-3xl font-bold text-white mb-2">1,200 EGP<span class="text-sm font-normal text-white/80 en">/month</span><span class="text-sm font-normal text-white/80 ar hidden">/شهر</span></div>
+                        <button class="w-full bg-white text-primary py-2 rounded-lg hover:bg-gray-100 smooth-transition en">
+                            Get Started
+                        </button>
+                        <button class="w-full bg-white text-primary py-2 rounded-lg hover:bg-gray-100 smooth-transition ar hidden">
+                            ابدأ الآن
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">5 Property Listings</span><span class="ar hidden">5 إعلانات عن عقارات</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">20 Photos per Property</span><span class="ar hidden">20 صورة لكل عقار</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">3 Videos (5 min max each)</span><span class="ar hidden">3 فيديوهات (5 دقائق كحد أقصى لكل)</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">Advanced Analytics</span><span class="ar hidden">تحليلات متقدمة</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">1 Featured Listing</span><span class="ar hidden">إعلان مميز واحد</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">Priority Support</span><span class="ar hidden">دعم مميز</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Enterprise Plan -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <div class="bg-gray-100 p-6 text-center">
+                        <h3 class="text-xl font-semibold mb-1 en">Enterprise</h3>
+                        <h3 class="text-xl font-semibold mb-1 ar hidden">المؤسسات</h3>
+                        
+                        <p class="text-gray-600 mb-4 en">For agencies & developers</p>
+                        <p class="text-gray-600 mb-4 ar hidden">للوكالات والمطورين</p>
+                        
+                        <div class="text-3xl font-bold text-dark mb-2">3,500 EGP<span class="text-sm font-normal text-gray-500 en">/month</span><span class="text-sm font-normal text-gray-500 ar hidden">/شهر</span></div>
+                        <button class="w-full bg-gray-200 text-dark py-2 rounded-lg hover:bg-gray-300 smooth-transition en">
+                            Get Started
+                        </button>
+                        <button class="w-full bg-gray-200 text-dark py-2 rounded-lg hover:bg-gray-300 smooth-transition ar hidden">
+                            ابدأ الآن
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">Unlimited Listings</span><span class="ar hidden">إعلانات غير محدودة</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">30 Photos per Property</span><span class="ar hidden">30 صورة لكل عقار</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">5 Videos (5 min max each)</span><span class="ar hidden">5 فيديوهات (5 دقائق كحد أقصى لكل)</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">Premium Analytics</span><span class="ar hidden">تحليلات مميزة</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">5 Featured Listings</span><span class="ar hidden">5 إعلانات مميزة</span></li>
+                            <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> <span class="en">24/7 VIP Support</span><span class="ar hidden">دعم VIP على مدار الساعة</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-dark mb-4 en">What Our Users Say</h2>
+                <h2 class="text-3xl font-bold text-dark mb-4 ar hidden">ما يقوله مستخدمونا</h2>
+                
+                <p class="text-gray-600 max-w-2xl mx-auto en">Hear from our satisfied users about their experience with EstateConnect.</p>
+                <p class="text-gray-600 max-w-2xl mx-auto ar hidden">استمع إلى مستخدمينا الراضين عن تجربتهم مع إيستيت كونكت.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Testimonial 1 -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah M." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Sarah M.</h4>
+                            <p class="text-gray-500 text-sm en">Property Owner</p>
+                            <p class="text-gray-500 text-sm ar hidden">مالكة عقار</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 en">"I sold my apartment within 2 weeks of listing it on EstateConnect. The platform is so easy to use and the analytics helped me price my property competitively."</p>
+                    <p class="text-gray-700 mb-4 ar hidden">"لقد بعت شقتي خلال أسبوعين من إدراجها على إيستيت كونكت. المنصة سهلة الاستخدام وساعدتني التحليلات في تسعير عقاري بشكل تنافسي."</p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Ahmed K." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Ahmed K.</h4>
+                            <p class="text-gray-500 text-sm en">Real Estate Agent</p>
+                            <p class="text-gray-500 text-sm ar hidden">وسيط عقاري</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 en">"The professional plan has been a game-changer for my business. I can manage multiple listings and the featured option brings more visibility to my properties."</p>
+                    <p class="text-gray-700 mb-4 ar hidden">"خطة المحترفين كانت نقطة تحول في عملي. يمكنني إدارة إعلانات متعددة وخيار الإعلان المميز يجلب المزيد من الظهور لعقاراتي."</p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Nadia R." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Nadia R.</h4>
+                            <p class="text-gray-500 text-sm en">Home Buyer</p>
+                            <p class="text-gray-500 text-sm ar hidden">مشترية منزل</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 en">"Found my dream home through EstateConnect! The search filters are excellent and being able to message sellers directly made the process so much easier."</p>
+                    <p class="text-gray-700 mb-4 ar hidden">"وجدت منزل أحلامي من خلال إيستيت كونكت! فلاتر البحث ممتازة وإمكانية مراسلة البائعين مباشرة جعلت العملية أسهل بكثير."</p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 4 -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Omar S." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Omar S.</h4>
+                            <p class="text-gray-500 text-sm en">Developer</p>
+                            <p class="text-gray-500 text-sm ar hidden">مطور</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 en">"As a developer with multiple projects, the enterprise plan gives me all the tools I need to showcase my properties effectively. The video feature is particularly useful."</p>
+                    <p class="text-gray-700 mb-4 ar hidden">"كمطور لدي مشاريع متعددة، تمنحني خطة المؤسسات كل الأدوات التي أحتاجها لعرض عقاراتي بشكل فعال. ميزة الفيديو مفيدة بشكل خاص."</p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-primary text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4 en">Ready to Get Started?</h2>
+            <h2 class="text-3xl font-bold mb-4 ar hidden">هل أنت مستعد للبدء؟</h2>
+            
+            <p class="text-xl mb-8 max-w-2xl mx-auto en">Join thousands of satisfied users who are buying, selling, and renting properties through EstateConnect.</p>
+            <p class="text-xl mb-8 max-w-2xl mx-auto ar hidden">انضم إلى الآلاف من المستخدمين الراضين الذين يشترون ويبيعون ويؤجرون العقارات من خلال إيستيت كونكت.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 rtl:sm:space-x-0 rtl:sm:space-x-reverse">
+                <button class="px-6 py-3 bg-white text-primary rounded-lg font-medium hover:bg-gray-100 smooth-transition en">
+                    List Your Property
+                </button>
+                <button class="px-6 py-3 bg-white text-primary rounded-lg font-medium hover:bg-gray-100 smooth-transition ar hidden">
+                    أعلن عن عقارك
+                </button>
+                
+                <button class="px-6 py-3 border border-white text-white rounded-lg font-medium hover:bg-white/10 smooth-transition en">
+                    Browse Properties
+                </button>
+                <button class="px-6 py-3 border border-white text-white rounded-lg font-medium hover:bg-white/10 smooth-transition ar hidden">
+                    تصفح العقارات
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-12 pb-6">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-home text-primary text-2xl"></i>
+                        <span class="text-xl font-bold en">EstateConnect</span>
+                        <span class="text-xl font-bold ar hidden">إيستيت كونكت</span>
+                    </div>
+                    <p class="text-gray-400 mb-4 en">The modern way to buy, rent or advertise properties in Egypt.</p>
+                    <p class="text-gray-400 mb-4 ar hidden">الطريقة الحديثة لشراء أو تأجير أو الإعلان عن العقارات في مصر.</p>
+                    
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 en">Quick Links</h3>
+                    <h3 class="text-lg font-semibold mb-4 ar hidden">روابط سريعة</h3>
+                    
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white en">Home</a><a href="#" class="text-gray-400 hover:text-white ar hidden">الرئيسية</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white en">Properties</a><a href="#" class="text-gray-400 hover:text-white ar hidden">العقارات</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white en">About Us</a><a href="#" class="text-gray-400 hover:text-white ar hidden">من نحن</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white en">Contact</a><a href="#" class="text-gray-400 hover:text-white ar hidden">اتصل بنا</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white en">FAQ</a><a href="#" class="text-gray-400 hover:text-white ar hidden">الأسئلة الشائعة</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 en">Legal</h3>
+                    <h3 class="text-lg font-semibold mb-4 ar hidden">قانوني</h3>
+                    
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white en">Terms of Service</a><a href="#" class="text-gray-400 hover:text-white ar hidden">شروط الخدمة</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white en">Privacy Policy</a><a href="#" class="text-gray-400 hover:text-white ar hidden">سياسة الخصوصية</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white en">Cookie Policy</a><a href="#" class="text-gray-400 hover:text-white ar hidden">سياسة الكوكيز</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white en">GDPR</a><a href="#" class="text-gray-400 hover:text-white ar hidden">حماية البيانات</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 en">Contact Us</h3>
+                    <h3 class="text-lg font-semibold mb-4 ar hidden">اتصل بنا</h3>
+                    
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span class="en">123 Nile Street, Cairo, Egypt</span>
+                            <span class="ar hidden">123 شارع النيل، القاهرة، مصر</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-3"></i>
+                            <span>+20 123 456 7890</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <span>info@estateconnect.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0 en">© 2023 EstateConnect. All rights reserved.</p>
+                <p class="text-gray-400 mb-4 md:mb-0 ar hidden">© 2023 إيستيت كونكت. جميع الحقوق محفوظة.</p>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white en">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white ar hidden">سياسة الخصوصية</a>
+                    
+                    <a href="#" class="text-gray-400 hover:text-white en">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white ar hidden">شروط الخدمة</a>
+                    
+                    <a href="#" class="text-gray-400 hover:text-white en">Sitemap</a>
+                    <a href="#" class="text-gray-400 hover:text-white ar hidden">خريطة الموقع</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div class="fixed inset-0 bg-black/80 z-50 hidden" id="mobileMenu">
+        <div class="bg-white w-4/5 h-full p-6 rtl:text-right">
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-home text-primary text-2xl"></i>
+                    <span class="text-xl font-bold en">EstateConnect</span>
+                    <span class="text-xl font-bold ar hidden">إيستيت كونكت</span>
+                </div>
+                <button id="closeMobileMenu" class="text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <nav class="space-y-4 mb-8">
+                <a href="#" class="block py-2 font-medium text-primary en">Home</a>
+                <a href="#" class="block py-2 font-medium text-primary ar hidden">الرئيسية</a>
+                
+                <a href="#" class="block py-2 font-medium text-gray-600 en">Properties</a>
+                <a href="#" class="block py-2 font-medium text-gray-600 ar hidden">العقارات</a>
+                
+                <a href="#" class="block py-2 font-medium text-gray-600 en">Pricing</a>
+                <a href="#" class="block py-2 font-medium text-gray-600 ar hidden">الأسعار</a>
+                
+                <a href="#" class="block py-2 font-medium text-gray-600 en">About</a>
+                <a href="#" class="block py-2 font-medium text-gray-600 ar hidden">من نحن</a>
+                
+                <a href="#" class="block py-2 font-medium text-gray-600 en">Contact</a>
+                <a href="#" class="block py-2 font-medium text-gray-600 ar hidden">اتصل بنا</a>
+            </nav>
+            
+            <div class="space-y-3">
+                <button class="w-full px-4 py-2 text-primary border border-primary rounded-lg en">
+                    Login
+                </button>
+                <button class="w-full px-4 py-2 text-primary border border-primary rounded-lg ar hidden">
+                    تسجيل دخول
+                </button>
+                
+                <button class="w-full px-4 py-2 bg-primary text-white rounded-lg en">
+                    Register
+                </button>
+                <button class="w-full px-4 py-2 bg-primary text-white rounded-lg ar hidden">
+                    تسجيل
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <div class="fixed bottom-6 right-6 z-40 rtl:right-auto rtl:left-6">
+        <button id="chatButton" class="w-14 h-14 bg-primary rounded-full shadow-lg flex items-center justify-center text-white hover:bg-primary/90 smooth-transition">
+            <i class="fas fa-comment-dots text-xl"></i>
+        </button>
+        
+        <div id="chatWindow" class="hidden absolute bottom-20 right-0 rtl:right-auto rtl:left-0 w-80 bg-white rounded-t-xl shadow-xl overflow-hidden">
+            <div class="bg-primary text-white p-3 flex justify-between items-center">
+                <h3 class="font-semibold en">Support Chat</h3>
+                <h3 class="font-semibold ar hidden">دعم الدردشة</h3>
+                <button id="closeChat" class="text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="h-64 overflow-y-auto p-4 bg-gray-50">
+                <div class="mb-4">
+                    <div class="bg-white p-3 rounded-lg chat-bubble shadow-sm">
+                        <p class="text-sm en">Hello! How can we help you today?</p>
+                        <p class="text-sm ar hidden">مرحباً! كيف يمكننا مساعدتك اليوم؟</p>
+                        <p class="text-xs text-gray-500 mt-1 en">Support Team • Just now</p>
+                        <p class="text-xs text-gray-500 mt-1 ar hidden">فريق الدعم • الآن</p>
+                    </div>
+                </div>
+                
+                <!-- Sample chat messages would go here -->
+            </div>
+            
+            <div class="p-3 border-t border-gray-200 bg-white">
+                <div class="flex">
+                    <input type="text" placeholder="Type your message..." class="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-primary en">
+                    <input type="text" placeholder="اكتب رسالتك..." class="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-primary ar hidden">
+                    <button class="bg-primary text-white px-3 py-2 rounded-r-lg hover:bg-primary/90">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language Switching Functionality
+        const languageButton = document.getElementById('languageButton');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const currentLanguage = document.getElementById('currentLanguage');
+        const languageOptions = document.querySelectorAll('.language-option');
+        
+        // Toggle language dropdown
+        languageButton.addEventListener('click', function() {
+            languageDropdown.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!languageButton.contains(event.target) && !languageDropdown.contains(event.target)) {
+                languageDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Change language
+        languageOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                currentLanguage.textContent = lang === 'en' ? 'EN' : 'AR';
+                
+                // Toggle RTL for Arabic
+                if (lang === 'ar') {
+                    document.body.classList.add('rtl');
+                    document.body.setAttribute('dir', 'rtl');
+                    document.documentElement.setAttribute('lang', 'ar');
+                } else {
+                    document.body.classList.remove('rtl');
+                    document.body.setAttribute('dir', 'ltr');
+                    document.documentElement.setAttribute('lang', 'en');
+                }
+                
+                // Show/hide language elements
+                document.querySelectorAll('.en').forEach(el => {
+                    el.classList.toggle('hidden', lang !== 'en');
+                });
+                
+                document.querySelectorAll('.ar').forEach(el => {
+                    el.classList.toggle('hidden', lang !== 'ar');
+                });
+                
+                // Adjust dropdown menu direction
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    if (lang === 'ar') {
+                        menu.classList.remove('right-0');
+                        menu.classList.add('left-0');
+                    } else {
+                        menu.classList.remove('left-0');
+                        menu.classList.add('right-0');
+                    }
+                });
+                
+                // Close dropdown
+                languageDropdown.classList.add('hidden');
+                
+                // Store language preference in localStorage
+                localStorage.setItem('preferredLanguage', lang);
+            });
+        });
+        
+        // Check for saved language preference
+        const savedLanguage = localStorage.getItem('preferredLanguage');
+        if (savedLanguage) {
+            // Find and click the corresponding language option
+            document.querySelector(`.language-option[data-lang="${savedLanguage}"]`).click();
+        }
+        
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuButton').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.remove('hidden');
+        });
+        
+        document.getElementById('closeMobileMenu').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.add('hidden');
+        });
+        
+        // Chat Widget Toggle
+        document.getElementById('chatButton').addEventListener('click', function() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.classList.toggle('hidden');
+        });
+        
+        document.getElementById('closeChat').addEventListener('click', function() {
+            document.getElementById('chatWindow').classList.add('hidden');
+        });
+        
+        // Dropdown Menu
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+            dropdown.addEventListener('mouseenter', function() {
+                this.querySelector('.dropdown-menu').classList.remove('hidden');
+            });
+            
+            dropdown.addEventListener('mouseleave', function() {
+                this.querySelector('.dropdown-menu').classList.add('hidden');
+            });
+        });
+        
+        // Active Nav Link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(l => {
+                    l.classList.remove('active', 'text-primary');
+                    l.classList.add('text-gray-600');
+                });
+                this.classList.add('active', 'text-primary');
+                this.classList.remove('text-gray-600');
+            });
+        });
+        
+        // Property Card Hover Effect
+        document.querySelectorAll('.property-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const image = this.querySelector('.property-image');
+                if (image) {
+                    image.style.transform = 'scale(1.05)';
+                }
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                const image = this.querySelector('.property-image');
+                if (image) {
+                    image.style.transform = 'scale(1)';
+                }
+            });
+        });
+        
+        // Favorite Button Toggle
+        document.querySelectorAll('.fa-heart').forEach(heart => {
+            heart.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (this.classList.contains('far')) {
+                    this.classList.remove('far');
+                    this.classList.add('fas', 'text-red-500');
+                } else {
+                    this.classList.remove('fas', 'text-red-500');
+                    this.classList.add('far');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
